@@ -61,8 +61,8 @@ all: main-build
 main-build: snt.elf secondary-outputs
 
 # Tool invocations
-snt.elf snt.map: $(OBJS) $(USER_OBJS) C:\Users\ABC\STM32CubeIDE\workspace_1.9.0\snt\STM32G071RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "snt.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\ABC\STM32CubeIDE\workspace_1.9.0\snt\STM32G071RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="snt.map" -Wl,--gc-sections -static -L"C:\Users\ABC\STM32CubeIDE\workspace_1.9.0\snt\NRF905-STM32" -specs=rdimon.specs -lc -lrdimon --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+snt.elf snt.map: $(OBJS) $(USER_OBJS) C:\Users\ABC\Documents\SNT_Decoder\snt\STM32G071RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "snt.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\ABC\Documents\SNT_Decoder\snt\STM32G071RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="snt.map" -Wl,--gc-sections -static -L"C:\Users\ABC\Documents\SNT_Decoder\snt\NRF905-STM32" -specs=rdimon.specs -lc -lrdimon --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

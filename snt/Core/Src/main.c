@@ -82,8 +82,8 @@ int message_length;
 uint32_t my_address;
 uint32_t receiver_address;
 
-#define ADDRESS_MASTER 0xE7E7E7E7
-#define ADDRESS_SLAVE  0xE7E7E7E7
+#define ADDRESS_MASTER 0xA2B5D154
+#define ADDRESS_SLAVE  0xA2B5D154
 
 /* USER CODE END 0 */
 
@@ -135,10 +135,10 @@ int main(void)
 
   	NRF905_hw.gpio[NRF905_HW_GPIO_CD].pin = CD_Pin;
   	NRF905_hw.gpio[NRF905_HW_GPIO_CD].port = CD_GPIO_Port;
-  	NRF905_hw.gpio[NRF905_HW_GPIO_AM].pin = 0;
-  	NRF905_hw.gpio[NRF905_HW_GPIO_AM].port = NULL;
-  	NRF905_hw.gpio[NRF905_HW_GPIO_DR].pin = 0;
-  	NRF905_hw.gpio[NRF905_HW_GPIO_DR].port = NULL;
+  	NRF905_hw.gpio[NRF905_HW_GPIO_AM].pin = AM_Pin;
+  	NRF905_hw.gpio[NRF905_HW_GPIO_AM].port = AM_GPIO_Port;
+  	NRF905_hw.gpio[NRF905_HW_GPIO_DR].pin = DR_Pin;
+  	NRF905_hw.gpio[NRF905_HW_GPIO_DR].port = DR_GPIO_Port;
 
   	NRF905_hw.gpio[NRF905_HW_GPIO_CS].pin = SPI_CS_Pin;
   	NRF905_hw.gpio[NRF905_HW_GPIO_CS].port = SPI_CS_GPIO_Port;
@@ -202,7 +202,9 @@ int main(void)
 			if (state_DR && state_AM) {
 				NRF905_read(&NRF905, nrf905_payload_buffer, NRF905_MAX_PAYLOAD);
 				nrf905_payload_buffer[NRF905_MAX_PAYLOAD] = 0x00;
-				printf("Received0: %d\r\n", nrf905_payload_buffer[2]);
+				++c;
+				printf("C: %d\r\n",c);
+//				printf("Received0: %d\r\n", nrf905_payload_buffer[0]);
 //				printf("Received1: %d\r\n", nrf905_payload_buffer[1]);
 //				printf("Received2: %d\r\n", nrf905_payload_buffer[2]);
 //				printf("Received3: %d\r\n", nrf905_payload_buffer[3]);
@@ -220,7 +222,7 @@ int main(void)
 			}
 
 		}
-		HAL_Delay(20);
+		HAL_Delay(60);
 
 		if (response_ok == 0) {
 			HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
