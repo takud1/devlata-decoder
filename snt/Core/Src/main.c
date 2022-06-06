@@ -79,6 +79,9 @@ uint8_t nrf905_payload_buffer[NRF905_MAX_PAYLOAD + 1];
 int message;
 int message_length;
 
+//volatile bool rx_flag = false;
+//volatile int state = 0;
+
 uint32_t my_address;
 uint32_t receiver_address;
 
@@ -200,10 +203,10 @@ int main(void)
 			uint8_t state_AM = NRF905_address_matched(&NRF905);
 
 			if (state_DR && state_AM) {
-				NRF905_read(&NRF905, nrf905_payload_buffer, NRF905_MAX_PAYLOAD);
+				NRF905_read_it(&NRF905, (uint8_t*)nrf905_payload_buffer, NRF905_MAX_PAYLOAD+1);
 				nrf905_payload_buffer[NRF905_MAX_PAYLOAD] = 0x00;
-				++c;
-				printf("C: %d\r\n",c);
+//				++c;
+//				printf("C: %d\r\n",c);
 //				printf("Received0: %d\r\n", nrf905_payload_buffer[0]);
 //				printf("Received1: %d\r\n", nrf905_payload_buffer[1]);
 //				printf("Received2: %d\r\n", nrf905_payload_buffer[2]);
@@ -291,7 +294,14 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+int call = 0;
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi){
 
+//	printf("%d\n", call++);
+	NRF905_spi_deselect(&NRF905);
+//rx_flag = true;
+
+}
 /* USER CODE END 4 */
 
 /**

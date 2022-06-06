@@ -94,3 +94,18 @@ int NRF905_hw_spi_transfer(NRF905_hw_t *hw, uint8_t data_tx, uint8_t *data_rx) {
 
 	return ret;
 }
+
+int NRF905_hw_spi_receive_it(NRF905_hw_t *hw, void* data_tx, uint8_t *data_rx, uint16_t size) {
+	uint8_t dummy;
+	int ret;
+
+	if (hw == NULL) {
+		return -1;
+	}
+
+
+
+	ret = HAL_SPI_Receive_IT((SPI_HandleTypeDef*) hw->spi, (uint8_t*)data_rx, size);
+
+	return ret;
+}

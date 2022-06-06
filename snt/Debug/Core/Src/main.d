@@ -34,8 +34,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h \
  ../Core/Inc/spi.h ../Core/Inc/main.h ../Core/Inc/tim.h \
  ../Core/Inc/usart.h ../Core/Inc/gpio.h ../Core/Inc/cd4094.h \
- C:/Users/ABC/Documents/SNT_Decoder/snt/NRF905-STM32/NRF905.h \
- C:/Users/ABC/Documents/SNT_Decoder/snt/NRF905-STM32/NRF905_hw.h
+ /home/takud/decoder/snt/NRF905-STM32/NRF905.h \
+ /home/takud/decoder/snt/NRF905-STM32/NRF905_hw.h
 ../Core/Inc/main.h:
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h:
 ../Core/Inc/stm32g0xx_hal_conf.h:
@@ -76,5 +76,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/usart.h:
 ../Core/Inc/gpio.h:
 ../Core/Inc/cd4094.h:
-C:/Users/ABC/Documents/SNT_Decoder/snt/NRF905-STM32/NRF905.h:
-C:/Users/ABC/Documents/SNT_Decoder/snt/NRF905-STM32/NRF905_hw.h:
+/home/takud/decoder/snt/NRF905-STM32/NRF905.h:
+/home/takud/decoder/snt/NRF905-STM32/NRF905_hw.h:

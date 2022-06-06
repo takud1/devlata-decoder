@@ -352,6 +352,27 @@ int NRF905_read(NRF905_t *dev, void *data, uint8_t len) {
 	return 0;
 }
 
+int NRF905_read_it(NRF905_t *dev, void *data, uint8_t len) {
+	if (dev == NULL) {
+		return -1;
+	}
+
+	NRF905_HW_SPI_SELECT(dev->hw);
+	NRF905_hw_spi_transfer(dev->hw, NRF905_CMD_R_RX_PAYLOAD, NULL);
+
+	// Get received payload
+
+	NRF905_hw_spi_receive_it(dev->hw, NRF905_CMD_NOP, (uint8_t*) data,len);
+
+
+
+	return 0;
+}
+void NRF905_spi_deselect(NRF905_t *dev) {
+
+	NRF905_HW_SPI_DESELECT(dev->hw);
+
+}
 int NRF905_power_down(NRF905_t *dev) {
 	if (dev == NULL) {
 		return -1;
