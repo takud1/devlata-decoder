@@ -81,6 +81,12 @@ int message_length;
 
 //volatile bool rx_flag = false;
 //volatile int state = 0;
+volatile bool response = false;
+int c = 0;
+int counter = 0;
+int shift_num = 0x00000000;
+int temp_num = 0x00000000;
+int led = 0;
 
 uint32_t my_address;
 uint32_t receiver_address;
@@ -122,7 +128,10 @@ int main(void)
   MX_USART2_UART_Init();
   MX_SPI2_Init();
   MX_TIM3_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+  HAL_TIM_Base_Start_IT(&htim2);
+
   uint32_t uid = 0x00;
   	for (uint8_t i = 0; i < 3; ++i) {
   		uid += (uint32_t) (UID_BASE + i * 4);
@@ -197,40 +206,51 @@ int main(void)
 		NRF905_rx(&NRF905);
 //		uint32_t wait = rand() % 21 + 20;
 //		printf("Waiting for max %ld ms\r\n", wait * 100);
-		uint8_t response_ok = 0;
-		for (int i = 0; i < 500; ++i) {
-			uint8_t state_DR = NRF905_data_ready(&NRF905);
-			uint8_t state_AM = NRF905_address_matched(&NRF905);
+//		for (int i = 0; i < 500; ++i) {
+//			uint8_t state_DR = NRF905_data_ready(&NRF905);
+//			uint8_t state_AM = NRF905_address_matched(&NRF905);
 
-			if (state_DR && state_AM) {
-				NRF905_read_it(&NRF905, (uint8_t*)nrf905_payload_buffer, NRF905_MAX_PAYLOAD+1);
-				nrf905_payload_buffer[NRF905_MAX_PAYLOAD] = 0x00;
+//			if (state_DR && state_AM) {
+//				printf("Non int");
+//			}
+//				NRF905_read_it(&NRF905, (uint8_t*)nrf905_payload_buffer, NRF905_MAX_PAYLOAD+1);
+//				nrf905_payload_buffer[NRF905_MAX_PAYLOAD] = 0x00;
 //				++c;
 //				printf("C: %d\r\n",c);
 //				printf("Received0: %d\r\n", nrf905_payload_buffer[0]);
 //				printf("Received1: %d\r\n", nrf905_payload_buffer[1]);
 //				printf("Received2: %d\r\n", nrf905_payload_buffer[2]);
 //				printf("Received3: %d\r\n", nrf905_payload_buffer[3]);
-				if(nrf905_payload_buffer[2]==0xD3){
-					writeToShiftRegister(0x00000000 + RELAY07);
-					HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
-
-				}
-
-
-//				printf("Switching to TX (%08lX)\r\n", my_address);
+//			if(nrf905_payload_buffer[2]==0xD3){
+//				printf("C: %d\r\n",c++);
+//				writeToShiftRegister(0x00000000 + RELAY07);
 //				HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
-				response_ok = 1;
-				break;
-			}
+//
+////				}
+//
+//
+////				printf("Switching to TX (%08lX)\r\n", my_address);
+////				HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
+////				response_ok = 1;
+//				break;
+//			}
 
-		}
-		HAL_Delay(60);
+//		}
+//		HAL_Delay(60);
 
-		if (response_ok == 0) {
-			HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
-			writeToShiftRegister(0x00000000);
+		if (counter >= 8) {
+//			HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+			shift_num = 0x00000000;
+			led = 0;
+			counter = 0;
 //			printf("No response\r\n");
+		}
+
+		if(shift_num != temp_num){
+//
+			writeToShiftRegister(shift_num);
+			HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, led);
+			temp_num = shift_num;
 		}
 
 		//HAL_Delay(25);
@@ -300,6 +320,30 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi){
 //	printf("%d\n", call++);
 	NRF905_spi_deselect(&NRF905);
 //rx_flag = true;
+
+}
+
+void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
+{
+
+	if (GPIO_Pin == GPIO_PIN_12){
+
+		NRF905_read_it(&NRF905, (uint8_t*)nrf905_payload_buffer, NRF905_MAX_PAYLOAD+1);
+		nrf905_payload_buffer[NRF905_MAX_PAYLOAD] = 0x00;
+		if(nrf905_payload_buffer[2]==0xD3){
+//			printf("C: %d\r\n",c++);
+			shift_num = 0x00000000 + RELAY09;
+			led = 1;
+//			HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
+			counter = 0;
+		}
+	}
+
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim){
+
+	counter++;
 
 }
 /* USER CODE END 4 */
