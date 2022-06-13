@@ -96,7 +96,7 @@ int NRF905_hw_spi_transfer(NRF905_hw_t *hw, uint8_t data_tx, uint8_t *data_rx) {
 }
 
 int NRF905_hw_spi_receive_it(NRF905_hw_t *hw, void* data_tx, uint8_t *data_rx, uint16_t size) {
-	uint8_t dummy;
+//	uint8_t dummy;
 	int ret;
 
 	if (hw == NULL) {

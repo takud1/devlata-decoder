@@ -188,7 +188,6 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  	int c = 0;
 	while (1) {
 
 //		if(!HAL_GPIO_ReadPin(BUTTON_GPIO_Port, BUTTON_Pin)){
@@ -238,7 +237,7 @@ int main(void)
 //		}
 //		HAL_Delay(60);
 
-		if (counter >= 8) {
+		if (counter >= 10) {
 //			HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
 			shift_num = 0x00000000;
 			led = 0;
@@ -248,7 +247,7 @@ int main(void)
 
 		if(shift_num != temp_num){
 //
-			writeToShiftRegister(shift_num);
+			triggerRelays(shift_num);
 			HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, led);
 			temp_num = shift_num;
 		}
@@ -330,9 +329,22 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
 		NRF905_read_it(&NRF905, (uint8_t*)nrf905_payload_buffer, NRF905_MAX_PAYLOAD+1);
 		nrf905_payload_buffer[NRF905_MAX_PAYLOAD] = 0x00;
-		if(nrf905_payload_buffer[2]==0xD3){
+
+//		printf("Int");
+
+		if((nrf905_payload_buffer[1]==0xD3) && (nrf905_payload_buffer[5]==0x16) &&
+				(nrf905_payload_buffer[9]==0x69)){
 //			printf("C: %d\r\n",c++);
-			shift_num = 0x00000000 + RELAY09;
+
+			uint32_t no1 = ((uint32_t)nrf905_payload_buffer[4] << 16) | ((uint32_t)nrf905_payload_buffer[3] << 8)
+					| ((uint32_t)nrf905_payload_buffer[2]);
+			uint32_t no2 = ((uint32_t)nrf905_payload_buffer[8] << 16) | ((uint32_t)nrf905_payload_buffer[7] << 8)
+					| ((uint32_t)nrf905_payload_buffer[6]);
+
+			if(no1 == no2){
+				shift_num = no1;
+			}
+//			shift_num = 0x00000000 + RELAY09;
 			led = 1;
 //			HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
 			counter = 0;

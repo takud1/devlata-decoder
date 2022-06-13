@@ -278,6 +278,10 @@ int NRF905_rx(NRF905_t *dev);
 
 int NRF905_read(NRF905_t *dev, void *data, uint8_t len);
 
+int NRF905_read_it(NRF905_t *dev, void *data, uint8_t len);
+
+void NRF905_spi_deselect(NRF905_t *dev);
+
 int NRF905_power_down(NRF905_t *dev);
 
 int NRF905_power_up(NRF905_t *dev);
