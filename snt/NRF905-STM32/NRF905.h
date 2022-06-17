@@ -224,7 +224,7 @@ typedef enum {
 	NRF905_ADDR_SIZE_4 = 0x04,	///< 4 bytes
 } NRF905_addr_size_t;
 
-#define NRF905_MAX_PAYLOAD		32 ///< Maximum payload size
+#define NRF905_MAX_PAYLOAD		9 ///< Maximum payload size
 #define NRF905_REGISTER_COUNT	10 ///< Configuration register count
 
 #define NRF905_CALC_CHANNEL(f, b)	((((f) / (1 + (b>>1))) - 422400000UL) / 100000UL) ///< Workout channel from frequency & band

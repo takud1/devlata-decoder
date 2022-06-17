@@ -352,6 +352,8 @@ int NRF905_read(NRF905_t *dev, void *data, uint8_t len) {
 	return 0;
 }
 
+//	Function for non-blocking SPI
+//	Original function slightly modified for using interrupts
 int NRF905_read_it(NRF905_t *dev, void *data, uint8_t len) {
 	if (dev == NULL) {
 		return -1;
@@ -362,17 +364,17 @@ int NRF905_read_it(NRF905_t *dev, void *data, uint8_t len) {
 
 	// Get received payload
 
-	NRF905_hw_spi_receive_it(dev->hw, NRF905_CMD_NOP, (uint8_t*) data,len);
-
-
+	NRF905_hw_spi_receive_it(dev->hw, (uint8_t*)data,len);
 
 	return 0;
 }
+
 void NRF905_spi_deselect(NRF905_t *dev) {
 
 	NRF905_HW_SPI_DESELECT(dev->hw);
 
 }
+
 int NRF905_power_down(NRF905_t *dev) {
 	if (dev == NULL) {
 		return -1;

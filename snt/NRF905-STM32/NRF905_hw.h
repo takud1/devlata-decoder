@@ -43,7 +43,7 @@ void NRF905_hw_enable_timer(NRF905_hw_t *hw);
 
 int NRF905_hw_spi_transfer(NRF905_hw_t *hw, uint8_t data_tx, uint8_t *data_rx);
 
-int NRF905_hw_spi_receive_it(NRF905_hw_t *hw, void* data_tx, uint8_t *data_rx, uint16_t size);
+void NRF905_hw_spi_receive_it(NRF905_hw_t *hw, uint8_t *data_rx, uint16_t size);
 
 #define NRF905_HW_POWERED_UP(hw)		NRF905_hw_gpio_get(hw, NRF905_HW_GPIO_PWR)
 #define NRF905_HW_POWER_DOWN(hw)		NRF905_hw_gpio_set(hw, NRF905_HW_GPIO_PWR, 0)
